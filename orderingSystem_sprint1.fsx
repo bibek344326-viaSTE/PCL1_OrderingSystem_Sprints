@@ -1,15 +1,18 @@
 type DrinkSize = Small | Medium | Large
-
 type CoffeeType = Espresso | Latte | Cappuccino
 type TeaType = GreenTea | BlackTea | HerbalTea
 type JuiceType = OrangeJuice | AppleJuice | MangoJuice
 
+type DrinkCategory =
+    | Coffee of CoffeeType
+    | Tea of TeaType
+    | Juice of JuiceType
+    | Soda
+    | Milk
+
 type Drink =
-    | Coffee of CoffeeType * DrinkSize
-    | Tea of TeaType * DrinkSize
-    | Juice of JuiceType * DrinkSize
-    | Soda of DrinkSize
-    | Milk of DrinkSize
+    { Category: DrinkCategory
+      Size: DrinkSize }
 
 type FoodType = Sandwich | Burger | Salad
 type FruitType = Apple | Banana | Orange
@@ -20,40 +23,40 @@ type Product =
     | Fruit of FruitType
 
 let computeDrinkPrice (drink: Drink) =
-    match drink with
-    | Coffee (Espresso, Small) -> 20
-    | Coffee (Espresso, Medium) -> 25
-    | Coffee (Espresso, Large) -> 30
-    | Coffee (Latte, Small) -> 25
-    | Coffee (Latte, Medium) -> 30
-    | Coffee (Latte, Large) -> 35
-    | Coffee (Cappuccino, Small) -> 30
-    | Coffee (Cappuccino, Medium) -> 35
-    | Coffee (Cappuccino, Large) -> 40
-    | Tea (BlackTea, Small) -> 15
-    | Tea (BlackTea, Medium) -> 20
-    | Tea (BlackTea, Large) -> 25
-    | Tea (GreenTea, Small) -> 20
-    | Tea (GreenTea, Medium) -> 25
-    | Tea (GreenTea, Large) -> 30
-    | Tea (HerbalTea, Small) -> 25
-    | Tea (HerbalTea, Medium) -> 30
-    | Tea (HerbalTea, Large) -> 35
-    | Juice (OrangeJuice, Small) -> 30
-    | Juice (OrangeJuice, Medium) -> 35
-    | Juice (OrangeJuice, Large) -> 40
-    | Juice (AppleJuice, Small) -> 30
-    | Juice (AppleJuice, Medium) -> 35
-    | Juice (AppleJuice, Large) -> 40
-    | Juice (MangoJuice, Small) -> 35
-    | Juice (MangoJuice, Medium) -> 40
-    | Juice (MangoJuice, Large) -> 45
-    | Soda Small -> 15
-    | Soda Medium -> 20
-    | Soda Large -> 25
-    | Milk Small -> 10
-    | Milk Medium -> 15
-    | Milk Large -> 20
+    match drink.Category, drink.Size with
+    | Coffee Espresso, Small -> 20
+    | Coffee Espresso, Medium -> 25
+    | Coffee Espresso, Large -> 30
+    | Coffee Latte, Small -> 25
+    | Coffee Latte, Medium -> 30
+    | Coffee Latte, Large -> 35
+    | Coffee Cappuccino, Small -> 30
+    | Coffee Cappuccino, Medium -> 35
+    | Coffee Cappuccino, Large -> 40
+    | Tea BlackTea, Small -> 15
+    | Tea BlackTea, Medium -> 20
+    | Tea BlackTea, Large -> 25
+    | Tea GreenTea, Small -> 20
+    | Tea GreenTea, Medium -> 25
+    | Tea GreenTea, Large -> 30
+    | Tea HerbalTea, Small -> 25
+    | Tea HerbalTea, Medium -> 30
+    | Tea HerbalTea, Large -> 35
+    | Juice OrangeJuice, Small -> 30
+    | Juice OrangeJuice, Medium -> 35
+    | Juice OrangeJuice, Large -> 40
+    | Juice AppleJuice, Small -> 30
+    | Juice AppleJuice, Medium -> 35
+    | Juice AppleJuice, Large -> 40
+    | Juice MangoJuice, Small -> 35
+    | Juice MangoJuice, Medium -> 40
+    | Juice MangoJuice, Large -> 45
+    | Soda, Small -> 15
+    | Soda, Medium -> 20
+    | Soda, Large -> 25
+    | Milk, Small -> 10
+    | Milk, Medium -> 15
+    | Milk, Large -> 20
 
 let computeFoodPrice (food: FoodType) =
     match food with
@@ -73,7 +76,8 @@ let computeProductPrice (product: Product) =
     | Food f -> computeFoodPrice f
     | Fruit fr -> computeFruitPrice fr
 
-let order1 = Drink (Coffee (Latte, Medium))
+let order1 = Drink { Category = Coffee Latte; Size = Medium }
+
 let order2 = Food Sandwich
 let order3 = Fruit Apple
 
